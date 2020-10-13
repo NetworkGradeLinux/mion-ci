@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    - cron:  '0 2 * * 1-5'
+
+jobs:
+  clone:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: APS-Networks/mion
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        fetch-depth: 0
+        submodules: true
+        path: mion
+      
+    - uses: actions/checkout@v2
+      with:
+        repository: APS-Networks/meta-mion
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        path: mion/meta-mion
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: APS-Networks/meta-mion-stordis
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        path: mion/meta-mion-stordis  
+  
+  build:
+    runs-on: self-hosted
+    needs: [clone]
+
+    steps:
+    - name: Build script
+      shell: bash
+      working-directory: mion
+      run: |
+        DATE=$(date '+%F_%H-%M-%S')
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
+        rsync -av tmp/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_mender-onlpv1
+        ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
