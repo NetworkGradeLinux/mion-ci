@@ -45,9 +45,11 @@ jobs:
       shell: bash
       working-directory: mion
       run: |
-        DATE=$(date '+%F_%H-%M-%S')
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
+        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1,guest:mion-guest-onlpv2 -h host-mender:mion-host
         rsync -av tmp/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_mender-onlpv1
+        sed -i '/meta-mender/d' conf/bblayers.conf
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
+        ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv2
+        rsync -av tmp/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv2
