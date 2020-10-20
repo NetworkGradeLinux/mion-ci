@@ -6,6 +6,7 @@
 - meta-mion-stordis
 
 # Pre-release checklist - gating criteria
+0. All submodules have been updated
 1. All issues tagged for this release milestone have been closed
 2. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
 3. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
