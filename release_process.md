@@ -7,8 +7,8 @@
 
 # Pre-release checklist - gating criteria
 1. All issues tagged for this release milestone have been closed
-2. No outstanding merge requests (release repos and docs, CI, etc.)
-3. Last CI run passing
+2. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
+3. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
 4. Documentation has been updated and copyright/licenses checked
 5. Smoke test is performed and passing (see below)
 6. Release notes have been created and reviewed (see below)
