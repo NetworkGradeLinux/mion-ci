@@ -9,7 +9,7 @@
 
 # Release Candidate checklist - gating criteria
 1. All submodules have been updated
-1. DISTRO_VERSION and DISTRO_NAME have been bumped in meta-mion
+1. DISTRO_VERSION and DISTRO_NAME have been bumped in meta-mion (see note on release names below) 
 1. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
 1. Smoke test is performed and passing (see below)
 
@@ -19,6 +19,8 @@
 1. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
 1. Documentation has been updated and copyright/licenses checked
 1. Release notes have been created and reviewed (see below)
+
+- Releases are named alphabetically after the islands of ireland [listed here](https://en.wikipedia.org/wiki/List_of_islands_of_Ireland) - Achill, Blasket, ...
 
 - **NOTE: Strictly no releases on a Friday**
 ***
