@@ -4,20 +4,27 @@
 - mion
 - meta-mion
 - meta-mion-stordis
+- mion-ci
+- mion-docs
+
+# Release Candidate checklist - gating criteria
+1. All submodules have been updated
+1. DISTRO_VERSION and DISTRO_NAME have been bumped in meta-mion
+1. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
+1. Smoke test is performed and passing (see below)
 
 # Pre-release checklist - gating criteria
-0. All submodules have been updated
+1. All RC checklist items (above) have been satisfied
 1. All issues tagged for this release milestone have been closed
-2. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
-3. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
-4. Documentation has been updated and copyright/licenses checked
-5. Smoke test is performed and passing (see below)
-6. Release notes have been created and reviewed (see below)
-- NOTE: Strictly no releases on a Friday
+1. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
+1. Documentation has been updated and copyright/licenses checked
+1. Release notes have been created and reviewed (see below)
+
+- **NOTE: Strictly no releases on a Friday**
 ***
 
 ## Smoke test - build and flash an image to supported hardware
-- Check out chosen release commits on release branch branch (dunfell) build against those commits 
+- Clean check out chosen release commits on release branch branch (dunfell) build against those commits 
 - Flash onto a switch
 - Test that the switch and containers come up correctly and the system looks like its working correctly
 - **TODO: define pre-release smoke tests / checks**
@@ -26,26 +33,20 @@
 - Should be written in advance of the release and reviewed
 - Live in the annotated tags of the top level Mion repo but list all relevant changes for the release
 
-#### Proposed format
+#### Proposed format for annotated tags
 1. List of major new features and improvements
-2. List of main (important) bug fixes
-3. (if required) Errata of known issues
-4. (if required) Breaking changes and update instructions
+1. List of main (important) bug fixes
+1. (if required) Errata of known issues
+1. (if required) Breaking changes and update instructions
 
 ## Tagged release
-- Change DISTRO_VERSION to appropriate revision and commit.
-- Annotated and signed git tag containing a list of new features and bug fixes since last full release - **only changes relevant to this repo should be included**
+- Annotated git tag containing a list of new features and bug fixes since last full release - **only changes relevant to this repo should be included**
+- Make sure the docs are tagged the same as the code (dont need annotations) and available on https://docs.mion.io
 
-## Source release - before repos are public
-- Create a working source tree by cloning everything into the right place - as if for a build
-- Tar it all up with ``tar --exclude=".*" -czvf mion_vX.Y.tgz mion/``
-- Make sure the documentation covers the build process for this source/tarball release
-- Extract the tarball to an empty dir
-    + Check that none of the git history or other hidden files have been included anywhere
-    + Perform a test build to make sure everything works correctly
-- Place the tarball in a public GitHub repo (TODO create this repo and make sure it works)
+## Source release (only if specifically requested by user)
+- A script is provided to create a source release (only if required for a specific use case) - source_release.sh in this repo
+- If this type of release is requested the resulting tarball should be extracted and built to make sure it works
 
 ## Other stuff (TODO)
-- How do we make sure that the docs are tagged and match the release version - docs v1.0 for release v1.0 (doc submodule? dropdown?)
-- What is the process for a release announcement? email? website?
+- What is the process for a release announcement?
 - Bug tracking once releases are public?
