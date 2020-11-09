@@ -16,7 +16,7 @@ jobs:
         
     - uses: actions/checkout@v2
       with:
-        repository: APS-Networks/mion
+        repository: NetworkGradeLinux/mion
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
         fetch-depth: 0
@@ -25,17 +25,17 @@ jobs:
       
     - uses: actions/checkout@v2
       with:
-        repository: APS-Networks/meta-mion
+        repository: NetworkGradeLinux/meta-mion
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
         path: mion/meta-mion
         
     - uses: actions/checkout@v2
       with:
-        repository: APS-Networks/meta-mion-stordis
+        repository: NetworkGradeLinux/meta-mion-bsp
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
-        path: mion/meta-mion-stordis  
+        path: mion/meta-mion-bsp  
   
   build:
     runs-on: self-hosted
