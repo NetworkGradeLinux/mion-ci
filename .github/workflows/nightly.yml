@@ -47,20 +47,28 @@ jobs:
       working-directory: mion/build/conf
       run: echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
 
-    - name: Build Mender/ONLPv1+2
+    - name: Build stordis-bf2556x-1t Mender/ONLPv1
       shell: bash
       working-directory: mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1,guest:mion-guest-onlpv2 -h host-mender:mion-host
+        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_mender-onlpv1
+    
+    - name: Build accton-asgvolt64 Mender/ONLPv1
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m accton-asgvolt64 -c guest:mion-guest-onlpv1 -h host-mender:mion-host
+        rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_mender-onlpv1
     
     - name: Remove Mender layer
       shell: sh
       working-directory: mion/build/conf
       run: sed -i '/meta-mender/d' bblayers.conf
   
-    - name: Build Onie/ONLPv1
+    - name: Build stordis-bf2556x-1t ONIE/ONLPv1
       shell: bash
       working-directory: mion
       run: |
@@ -68,11 +76,11 @@ jobs:
         sed -i '/meta-mender/d' conf/bblayers.conf
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
-    
-    - name: Build Onie/ONLPv2
+
+    - name: Build accton-asgvolt64 ONIE/ONLPv1
       shell: bash
       working-directory: mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv2
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv2
+        ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_onie-onlpv1
