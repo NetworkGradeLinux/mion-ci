@@ -85,3 +85,34 @@ jobs:
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_onie-onlpv1
+  
+        
+    - name: Slack Notification on Fail
+      if: ${{ failure() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: gh-notify
+        SLACK_COLOR: bad
+        SLACK_ICON: https://raw.githubusercontent.com/phil-r/slack-emoji/master/emojis/Memes/thisisfine.png
+        SLACK_TITLE: Build Failure
+        SLACK_MESSAGE: "Workflow: ${{ github.workflow }}  RunID: ${{ github.run_id }}"
+        SLACK_USERNAME: Mion CI
+        SLACK_MSG_AUTHOR: GitHub
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_FOOTER: ""
+        MSG_MINIMAL: actions url
+      
+    - name: Slack Notification on Success
+      if: ${{ success() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: gh-notify
+        SLACK_COLOR: good
+        SLACK_ICON: https://raw.githubusercontent.com/phil-r/slack-emoji/master/emojis/Memes/allthe.png
+        SLACK_MESSAGE: "Workflow: ${{ github.workflow }}  RunID: ${{ github.run_id }}"
+        SLACK_TITLE: Build Success
+        SLACK_USERNAME: Mion CI
+        SLACK_MSG_AUTHOR: GitHub
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_FOOTER: ""
+        MSG_MINIMAL: actions url
