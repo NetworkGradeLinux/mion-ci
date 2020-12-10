@@ -57,6 +57,16 @@ jobs:
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_mender-onlpv1
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
+        
+    - name: Build stordis-bf6064x-t
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m stordis-bf6064x-t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
+        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_mender-onlpv1
+        ../mc_build.sh -m stordis-bf6064x-t -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_onie-onlpv1
     
     - name: Build accton-asgvolt64
       shell: bash
