@@ -48,7 +48,8 @@ jobs:
       working-directory: mion/build/conf
       run: echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
 
-    - name: Build stordis-bf2556x-1t
+    - name: Build stordis-bf2556x-1t (Mender+ONIE)
+      if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
       run: |
@@ -58,7 +59,8 @@ jobs:
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
         
-    - name: Build stordis-bf6064x-t
+    - name: Build stordis-bf6064x-t (Mender+ONIE)
+      if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
       run: |
@@ -67,24 +69,41 @@ jobs:
         rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_mender-onlpv1
         ../mc_build.sh -m stordis-bf6064x-t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_onie-onlpv1
-    
-    - name: Build accton-asgvolt64
+
+    - name: Build accton-wedge100bf-32x (ONIE)
+      if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m accton-asgvolt64 -c guest:mion-guest-onlpv1 -h host-mender:mion-host
-        rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_mender-onlpv1
+        ../mc_build.sh -m accton-wedge100bf-32x -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x ${GITHUB_WORKSPACE}/accton-wedge100bf-32x_onie-onlpv1
+
+    - name: Build accton-wedge100bf-65x (ONIE)
+      if: ${{ success() || failure() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m accton-wedge100bf-65x -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x ${GITHUB_WORKSPACE}/accton-wedge100bf-65x_onie-onlpv1
+
+    - name: Build accton-asgvolt64 (ONIE)
+      if: ${{ success() || failure() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_onie-onlpv1
-
+    
         
     - name: Slack Notification on Fail
       if: ${{ failure() }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: gh-notify
-        SLACK_COLOR: bad
+        SLACK_COLOR: danger
         SLACK_ICON: https://raw.githubusercontent.com/phil-r/slack-emoji/master/emojis/Memes/thisisfine.png
         SLACK_TITLE: Build Failure
         SLACK_MESSAGE: "Workflow: ${{ github.workflow }}  RunID: ${{ github.run_id }}"
