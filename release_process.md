@@ -17,14 +17,15 @@
 1. DISTRO_VERSION and DISTRO_NAME have been bumped in meta-mion (see note on release names below) 
 1. Last CI run passing [CI Actions](https://github.com/APS-Networks/mion-ci/actions)
 1. Smoke test is performed and passing (see below) on all available platforms
+1. Release candidate tags generated and pushed to all repos
 
 # Release checklist - gating criteria
-1. All RC checklist items (above) have been satisfied
+1. All RC checklist items (above) have been satisfied - the release should be the same as the final RC
 1. All issues tagged for this release milestone have been closed (or removed if they will not be completed) [mion project board](https://github.com/orgs/NetworkGradeLinux/projects/1)
 1. All new bugs have been triaged (important and unresolved bugs must be tracked in the Errata of the release) [mion project board](https://github.com/orgs/NetworkGradeLinux/projects/1)
 1. No outstanding merge requests (release repos and docs, CI, etc.) [Query here](https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+user%3AAPS-Networks)
 1. Documentation has been updated and copyright/licenses checked
-1. Release notes have been created and reviewed (see below)
+1. Release notes have been created and reviewed (see format below)
 
 ***
 
@@ -34,24 +35,18 @@
 - Test that the switch boot up and and the system appears to be working correctly, if necessary check that the containers come up correctly
 - **TODO: define pre-release smoke tests / checks**
 
-## Release notes
-- Should be written in advance of the release and reviewed
-- Live in the annotated tags of the top level Mion repo but list all relevant changes for the release
+## Creating the release
+- Create and push an annotated tag containing the release notes to the five repos listed above
+- Create a "Release" on the top level mion repo, using the new tag and paste in the same release notes 
+  - It might be necessary to slightly change the formatting of the release notes here as they will be rendedred as Markdown, eg. bullet lists
 
-#### Proposed format for annotated tags
-1. List of major new features and improvements
-1. List of main (important) bug fixes
-1. (if required) Errata of known issues
-1. (if required) Breaking changes and update instructions
+#### Format for annotated tags and GitHub release text
+1. *Main features and improvements*
+1. *Notable bug fixes*
+1. (if required) *Errata of known issues*
+1. (if required) *Breaking changes and update instructions*
 
-## Tagged release
-- Annotated git tag containing a list of new features and bug fixes since last full release
-- Make sure the docs are tagged the same as the code (dont need annotations) and available on https://docs.mion.io
 
-## Source release (only if specifically requested by user)
-- A script is provided to create a source release (only if required for a specific use case) - source_release.sh in this repo
-- If this type of release is requested the resulting tarball should be extracted and built to make sure it works
-
-## Other stuff (TODO)
-- What is the process for a release announcement?
-- Bug tracking once releases are public?
+## TODO
+- Release testing should be defined in a test plan
+- Formalise process for release announcement
