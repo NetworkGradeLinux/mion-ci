@@ -57,9 +57,9 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_mender-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_mender-onlpv1
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t ${GITHUB_WORKSPACE}/stordis-bf2556x-1t_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
         
     - name: Build stordis-bf6064x-t (Mender+ONIE)
       if: ${{ success() || failure() }}
@@ -68,9 +68,9 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m stordis-bf6064x-t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
-        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_mender-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_mender-onlpv1
         ../mc_build.sh -m stordis-bf6064x-t -h host-onie:mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t ${GITHUB_WORKSPACE}/stordis-bf6064x-t_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_onie-onlpv1
 
     - name: Build accton-wedge100bf-32x (ONIE)
       if: ${{ success() || failure() }}
@@ -79,7 +79,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-wedge100bf-32x -h host-onie:mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x ${GITHUB_WORKSPACE}/accton-wedge100bf-32x_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1
 
     - name: Build accton-wedge100bf-65x (ONIE)
       if: ${{ success() || failure() }}
@@ -88,7 +88,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-wedge100bf-65x -h host-onie:mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x ${GITHUB_WORKSPACE}/accton-wedge100bf-65x_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-65x_onie-onlpv1
 
     - name: Build accton-asgvolt64 (ONIE)
       if: ${{ success() || failure() }}
@@ -97,7 +97,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
     
     - name: Post-build steps
       if: ${{ success() }}
