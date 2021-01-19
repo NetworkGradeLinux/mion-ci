@@ -37,16 +37,18 @@ jobs:
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
         path: mion/meta-mion-bsp  
-  
+
   build:
     runs-on: self-hosted
     needs: [clone]
 
     steps:
-    - name: Set downloads dir
+    - name: Pre-build steps
       shell: sh
       working-directory: mion/build/conf
-      run: echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
+      run: |
+        echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
+        mkdir ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed
 
     - name: Build stordis-bf2556x-1t (Mender+ONIE)
       if: ${{ success() || failure() }}
@@ -97,6 +99,14 @@ jobs:
         ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64 ${GITHUB_WORKSPACE}/accton-asgvolt64_onie-onlpv1
     
+    - name: Post-build steps
+      if: ${{ success() }}
+      shell: sh
+      run: |
+        cd ~/DEPLOY/
+        mv ${GITHUB_RUN_NUMBER}_failed ${GITHUB_RUN_NUMBER}
+        find ${GITHUB_RUN_NUMBER} -type f -size +4G -delete
+        rm -rf $(ls -1t | tail -n +12)
         
     - name: Slack Notification on Fail
       if: ${{ failure() }}
