@@ -50,6 +50,13 @@ jobs:
         echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
         mkdir ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed
 
+    - name: Build QEMU
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -v qemu -m qemux86-64 -h host-onie:mion-image-onlpv1
+
     - name: Build stordis-bf2556x-1t (Mender+ONIE)
       if: ${{ success() || failure() }}
       shell: bash
