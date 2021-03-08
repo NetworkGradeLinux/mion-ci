@@ -47,9 +47,11 @@ jobs:
       shell: sh
       working-directory: mion/build/conf
       run: |
+        [ "${GITHUB_EVENT_NAME}" = "schedule" ] && rm -rf /home/gh-runner/sstate-cache/
         echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
+        echo "SSTATE_DIR ?= \"/home/gh-runner/sstate-cache/\"" >> local.conf
         mkdir ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed
-
+        
     - name: Build QEMU
       shell: bash
       working-directory: mion
