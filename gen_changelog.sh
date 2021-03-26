@@ -3,9 +3,9 @@
 LAST_RELEASE="dunfell-2020.12"
 CHANGELOG="changelog.txt"
 
-repos=(mion meta-mion meta-mion-bsp meta-mion-sde meta-mion-stratum)
+repos=(mion meta-mion meta-mion-bsp meta-mion-sde meta-mion-stratum mion-docs)
 
-rm ${CHANGELOG}
+[ -f ${CHANGELOG} ] && rm ${CHANGELOG}
 
 for r in "${repos[@]}"; do
     [ ! -d "$r" ] && git clone "git@github.com:NetworkGradeLinux/${r}.git"
