@@ -124,8 +124,8 @@ jobs:
       shell: sh
       working-directory: mion/build/conf
       run: |
-        sed "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\  \n\"#" bblayers.conf
-        sed "s#^\"#  \${MIONBASE}/meta-mion-sstratum \\\  \n\"#" bblayers.conf
+        sed -i "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\  \n\"#" bblayers.conf
+        sed -i "s#^\"#  \${MIONBASE}/meta-mion-sstratum \\\  \n\"#" bblayers.conf
         echo "IMAGE_INSTALL += \"stratum\"" >> local.conf
         
     - name: Build stordis-bf2556x-1t (SDE+Stratum)
