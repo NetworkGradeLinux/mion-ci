@@ -36,7 +36,21 @@ jobs:
         repository: NetworkGradeLinux/meta-mion-bsp
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
-        path: mion/meta-mion-bsp  
+        path: mion/meta-mion-bsp
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/meta-mion-sde
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        path: mion/meta-mion-sde 
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/meta-mion-stratum
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        path: mion/meta-mion-stratum 
 
   build:
     runs-on: self-hosted
