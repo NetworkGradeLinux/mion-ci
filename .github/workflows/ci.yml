@@ -61,29 +61,25 @@ jobs:
         ../mc_build.sh -v qemu -m qemux86-64 -h host-onie:mion-image-onlpv1
         rsync -av tmp-glibc/deploy/images/qemux86-64/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/qemux86-64-onlpv1
 
-    - name: Build stordis-bf2556x-1t (Mender+ONIE)
+    - name: Build stordis-bf2556x-1t
       if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m stordis-bf2556x-1t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_mender-onlpv1
         ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
         
-    - name: Build stordis-bf6064x-t (Mender+ONIE)
+    - name: Build stordis-bf6064x-t
       if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../mc_build.sh -m stordis-bf6064x-t -c guest:mion-guest-onlpv1 -h host-mender:mion-host
-        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_mender-onlpv1
         ../mc_build.sh -m stordis-bf6064x-t -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_onie-onlpv1
 
-    - name: Build accton-wedge100bf-32x (ONIE)
+    - name: Build accton-wedge100bf-32x
       if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
@@ -92,7 +88,7 @@ jobs:
         ../mc_build.sh -m accton-wedge100bf-32x -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1
 
-    - name: Build accton-wedge100bf-65x (ONIE)
+    - name: Build accton-wedge100bf-65x
       if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
@@ -101,7 +97,7 @@ jobs:
         ../mc_build.sh -m accton-wedge100bf-65x -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-65x_onie-onlpv1
 
-    - name: Build accton-asgvolt64 (ONIE)
+    - name: Build accton-asgvolt64
       if: ${{ success() || failure() }}
       shell: bash
       working-directory: mion
@@ -109,6 +105,32 @@ jobs:
         source openembedded-core/oe-init-build-env
         ../mc_build.sh -m accton-asgvolt64 -h host-onie:mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
+        
+    - name: Add Barefoot SDE to local.conf
+      shell: sh
+      working-directory: mion/build/conf
+      run: |
+        sed "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\  \n\"#" build/conf/bblayers.conf
+        sed "s#^\"#  \${MIONBASE}/meta-mion-sstratum \\\  \n\"#" build/conf/bblayers.conf
+        echo "IMAGE_INSTALL += \"stratum\"" >> local.conf
+        
+    - name: Build stordis-bf2556x-1t (SDE+Stratum)
+      if: ${{ success() || failure() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m stordis-bf2556x-1t -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
+        
+    - name: Build accton-wedge100bf-32x (SDE+Stratum)
+      if: ${{ success() || failure() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../mc_build.sh -m accton-wedge100bf-32x -h host-onie:mion-onie-image-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1   
     
     - name: Post-build steps
       if: ${{ success() }}
