@@ -40,6 +40,13 @@ jobs:
         
     - uses: actions/checkout@v2
       with:
+        repository: NetworkGradeLinux/meta-mion-backports
+        token: 15778706457973f3e610979dca82f8854e766d66
+        ref: dunfell
+        path: mion/meta-mion-backports
+        
+    - uses: actions/checkout@v2
+      with:
         repository: NetworkGradeLinux/meta-mion-sde
         token: 15778706457973f3e610979dca82f8854e766d66
         ref: dunfell
