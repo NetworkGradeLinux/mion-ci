@@ -140,7 +140,7 @@ jobs:
           accton-asgvolt64
       run: |
         source openembedded-core/oe-init-build-env
-        for sys in $PACKAGE_FEED; do /mc_ "${sys}" package-index; done
+        for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
         rsync -av tmp-glibc/deploy/ipk/ ~/PKG/
 
     - name: Add Barefoot SDE to local.conf
