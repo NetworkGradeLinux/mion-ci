@@ -70,9 +70,9 @@ jobs:
       run: |
         echo "Event name: ${GITHUB_EVENT_NAME}"
         [ "${GITHUB_EVENT_NAME}" = "schedule" ] && rm -rf /home/gh-runner/sstate-cache/
-        echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
+        echo "DL_DIR ?= \"/srv/downloads/\"" >> local.conf
         echo "SSTATE_DIR ?= \"/home/gh-runner/sstate-cache/\"" >> local.conf
-        mkdir ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed
+        mkdir /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed
         
     - name: Build QEMU
       shell: bash
@@ -80,7 +80,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m qemux86-64 -v qemu mion-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/qemux86-64/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/qemux86-64-onlpv1
+        rsync -av tmp-glibc/deploy/images/qemux86-64/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/qemux86-64-onlpv1
 
     - name: Build stordis-bf2556x-1t
       if: ${{ success() || failure() }}
@@ -89,7 +89,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
         
     - name: Build stordis-bf6064x-t
       if: ${{ success() || failure() }}
@@ -98,7 +98,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf6064x-t mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf6064x-t/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf6064x-t_onie-onlpv1
 
     - name: Build accton-wedge100bf-32x
       if: ${{ success() || failure() }}
@@ -107,7 +107,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1
 
     - name: Build accton-wedge100bf-65x
       if: ${{ success() || failure() }}
@@ -116,7 +116,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-65x mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-65x_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-65x/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-65x_onie-onlpv1
 
     - name: Build accton-asgvolt64
       if: ${{ success() || failure() }}
@@ -125,7 +125,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-asgvolt64 mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
 
     - name: Generate package feed
       if: ${{ success() }}
@@ -141,7 +141,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
-        rsync -av tmp-glibc/deploy/ipk/ ~/PKG/
+        rsync -av tmp-glibc/deploy/ipk/ /srv/IPK/latest/
 
     - name: Add Barefoot SDE to local.conf
       if: ${{ success() }}
@@ -160,7 +160,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
+        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
         
     - name: Build accton-wedge100bf-32x (SDE+Stratum)
       if: ${{ success() || failure() }}
@@ -169,7 +169,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ ~/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1   
+        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1   
     
     - name: Post-build steps
       if: ${{ success() }}
@@ -178,7 +178,7 @@ jobs:
         cd ~/DEPLOY/
         mv ${GITHUB_RUN_NUMBER}_failed ${GITHUB_RUN_NUMBER}
         find ${GITHUB_RUN_NUMBER} -type f -size +4G -delete
-        rm -rf $(ls -1t | tail -n +12)
+        rm -rf $(ls -1t | tail -n +52)
         
     - name: Slack Notification on Fail
       if: ${{ failure() }}
