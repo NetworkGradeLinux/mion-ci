@@ -128,7 +128,7 @@ jobs:
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
 
     - name: Generate package feed
-      if: ${{ success() }}
+      if: ${{ success() && github.event_name == 'schedule' }}
       shell: bash
       working-directory: mion
       env: 
@@ -141,7 +141,7 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
-        rsync -av tmp-glibc/deploy/ipk/ /srv/IPK/latest/
+        rsync -av tmp-glibc/deploy/ipk/ /srv/www/repo/latest/
 
     - name: Add Barefoot SDE to local.conf
       if: ${{ success() }}
