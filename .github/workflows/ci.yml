@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/mion
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         fetch-depth: 0
         submodules: true
@@ -27,35 +27,35 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-bsp
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion-bsp
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-backports
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion-backports
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-sde
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion-sde 
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-stratum
-        token: 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
+        token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion-stratum 
 
