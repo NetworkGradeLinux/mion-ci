@@ -141,7 +141,8 @@ jobs:
       run: |
         source openembedded-core/oe-init-build-env
         for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
-        rsync -av tmp-glibc/deploy/ipk/ /srv/www/repo/latest/
+        RELEASE_DATE=$(awk '/^DISTRO_DATE/{print $3}' meta-mion/conf/distro/mion.conf | tr -d \")
+        rsync -av tmp-glibc/deploy/ipk/ /srv/www/repo/${RELEASE_DATE}/
 
     - name: Add Barefoot SDE to local.conf
       if: ${{ success() }}
