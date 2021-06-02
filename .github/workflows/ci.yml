@@ -139,8 +139,8 @@ jobs:
           accton-wedge100bf-65x
           accton-asgvolt64
       run: |
-        source openembedded-core/oe-init-build-env
         RELEASE_DATE=$(awk '/^DISTRO_DATE/{print $3}' meta-mion/conf/distro/mion.conf | tr -d \")
+        source openembedded-core/oe-init-build-env
         for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
         rsync -av tmp-glibc/deploy/ipk/ /srv/www/repo/${RELEASE_DATE}/
 
