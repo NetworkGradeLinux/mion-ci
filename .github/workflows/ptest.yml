@@ -1,0 +1,109 @@
+name: ptest
+
+on:
+  workflow_dispatch:
+  #repository_dispatch:
+  #push:
+  #  branches: main
+  #schedule:
+  # - cron:  '0 2 * * 2-6'
+
+jobs:
+  clone:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/mion
+        token: ${{ secrets.ACCESS_TOKEN }}
+        ref: dunfell
+        fetch-depth: 0
+        submodules: true
+        path: mion
+      
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/meta-mion
+        token: ${{ secrets.ACCESS_TOKEN }}
+        ref: dunfell
+        path: mion/meta-mion
+        
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/meta-mion-bsp
+        token: ${{ secrets.ACCESS_TOKEN }}
+        ref: dunfell
+        path: mion/meta-mion-bsp
+    
+    - uses: actions/checkout@v2
+      with:
+        repository: NetworkGradeLinux/meta-mion-backports
+        token: ${{ secrets.ACCESS_TOKEN }}
+        ref: dunfell
+        path: mion/meta-mion-backports
+
+  build:
+    runs-on: self-hosted
+    needs: [clone]
+
+    steps:
+    - name: Pre-build steps
+      shell: sh
+      working-directory: mion/build/conf
+      run: |
+        #echo "Event name: ${GITHUB_EVENT_NAME}"
+        #[ "${GITHUB_EVENT_NAME}" = "schedule" ] && rm -rf /home/gh-runner/sstate-cache/
+        echo "DL_DIR ?= \"/home/gh-runner/downloads/\"" >> local.conf
+        echo "SSTATE_DIR ?= \"/home/gh-runner/sstate-cache/\"" >> local.conf
+        echo "DISTRO_FEATURES_append += \" ptest\"" >> local.conf
+        
+    - name: Build QEMU
+      if: ${{ success() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../cronie.sh -v qemu -m qemux86-64 mion-image-onlpv1-ptest
+
+    - name: Check networking setup
+      if: ${{ success() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        # get github-runner group id  
+        # GRID=`id -g gh-runner`
+        # tap device exists
+        # TODO: check that it exists for group..this will be done later
+        ip link | grep 'tap'
+
+    - name: runqemu
+      if: ${{ success() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        runqemu tmp-glibc/deploy/images/qemux86-64 &
+    
+    - name: ptest-runner
+      if: ${{ success() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        ssh-keygen -f "/home/gh-runner/.ssh/known_hosts" -R "192.168.7.2"
+        # We wait a minute for qemu to finish booting.
+        sleep 60 && ssh -o StrictHostKeyChecking=no root@192.168.7.2 'ptest-runner > ptest.log; exit'
+        
+    - name: Copy results
+      if: ${{ success() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        DATE=`date --iso-8601`
+        # Copying local to server. As we will eventually want to parse the
+        # results, this would make that easier, and is less hassle than
+        # commiting them, though we will likely want to have them somewhere
+        # more accessible and public later.
+        scp -o StrictHostKeyCHecking=no root@192.168.7.2:/root/ptest.log /srv/test_results/ptests/${DATE}-ptest.log
