@@ -14,6 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: ${{ GITHUB_WORKFLOW }}
         
     - uses: actions/checkout@v2
       with:
@@ -22,28 +24,28 @@ jobs:
         ref: dunfell
         fetch-depth: 0
         submodules: true
-        path: mion
+        path: ${{ GITHUB_WORKFLOW }}/mion
       
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion
+        path: ${{ GITHUB_WORKFLOW }}/mion/meta-mion
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-bsp
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-bsp
+        path: ${{ GITHUB_WORKFLOW }}/mion/meta-mion-bsp
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-backports
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-backports
+        path: ${{ GITHUB_WORKFLOW }}/mion/meta-mion-backports
 
   build:
     runs-on: self-hosted
@@ -52,7 +54,7 @@ jobs:
     steps:
     - name: Pre-build steps
       shell: sh
-      working-directory: mion/build/conf
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion/build/conf
       run: |
         echo "Event name: ${GITHUB_EVENT_NAME}"
         [ "${GITHUB_EVENT_NAME}" = "schedule" ] && rm -rf /home/gh-runner/sstate-cache/
@@ -62,7 +64,7 @@ jobs:
         
     - name: Build QEMU
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m qemux86-64 -v qemu mion-image-onlpv1
@@ -71,7 +73,7 @@ jobs:
     - name: Build stordis-bf2556x-1t
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
@@ -80,7 +82,7 @@ jobs:
     - name: Build stordis-bf6064x-t
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf6064x-t mion-onie-image-onlpv1
@@ -89,7 +91,7 @@ jobs:
     - name: Build accton-wedge100bf-32x
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
@@ -98,7 +100,7 @@ jobs:
     - name: Build accton-wedge100bf-65x
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-65x mion-onie-image-onlpv1
@@ -107,16 +109,16 @@ jobs:
     - name: Build accton-asgvolt64
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-asgvolt64 mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
         
-    - name: Build accton-asgvolt64
+    - name: Build delta-tn48m
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m delta-tn48m mion-onie-image-dent-initramfs
@@ -125,7 +127,7 @@ jobs:
     - name: Generate package feed
       if: ${{ success() && github.event_name == 'schedule' }}
       shell: bash
-      working-directory: mion
+      working-directory: ${{ GITHUB_WORKFLOW }}/mion
       env: 
         PACKAGE_FEED: |
           stordis-bf2556x-1t
