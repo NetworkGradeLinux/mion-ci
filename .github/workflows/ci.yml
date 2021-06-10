@@ -44,20 +44,6 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
         path: mion/meta-mion-backports
-        
-    - uses: actions/checkout@v2
-      with:
-        repository: NetworkGradeLinux/meta-mion-sde
-        token: ${{ secrets.ACCESS_TOKEN }}
-        ref: dunfell
-        path: mion/meta-mion-sde 
-        
-    - uses: actions/checkout@v2
-      with:
-        repository: NetworkGradeLinux/meta-mion-stratum
-        token: ${{ secrets.ACCESS_TOKEN }}
-        ref: dunfell
-        path: mion/meta-mion-stratum 
 
   build:
     runs-on: self-hosted
@@ -144,34 +130,6 @@ jobs:
         for sys in $PACKAGE_FEED; do ../cronie.sh -m "${sys}" package-index; done
         rsync -av tmp-glibc/deploy/ipk/ /srv/www/repo/${RELEASE_DATE}/
 
-    - name: Add Barefoot SDE to local.conf
-      if: ${{ success() }}
-      shell: sh
-      working-directory: mion/build/conf
-      run: |
-        sed -i "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\\\n\"#" bblayers.conf
-        sed -i "s#^\"#  \${MIONBASE}/meta-mion-stratum \\\\\n\"#" bblayers.conf
-        echo "IMAGE_INSTALL += \"stratum\"" >> local.conf
-        cp -r ~/bf-sde ../../
-        
-    - name: Build stordis-bf2556x-1t (SDE+Stratum)
-      if: ${{ success() || failure() }}
-      shell: bash
-      working-directory: mion
-      run: |
-        source openembedded-core/oe-init-build-env
-        ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
-        
-    - name: Build accton-wedge100bf-32x (SDE+Stratum)
-      if: ${{ success() || failure() }}
-      shell: bash
-      working-directory: mion
-      run: |
-        source openembedded-core/oe-init-build-env
-        ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
-        rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1   
-    
     - name: Post-build steps
       if: ${{ success() }}
       shell: sh
@@ -179,7 +137,7 @@ jobs:
         cd /srv/DEPLOY/
         mv ${GITHUB_RUN_NUMBER}_failed ${GITHUB_RUN_NUMBER}
         find ${GITHUB_RUN_NUMBER} -type f -size +4G -delete
-        rm -rf $(ls -1t | tail -n +52)
+        rm -rf $(ls -1t | tail -n +32)
         
     - name: Slack Notification on Fail
       if: ${{ failure() }}
