@@ -112,6 +112,15 @@ jobs:
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-asgvolt64 mion-onie-image-onlpv1
         rsync -av tmp-glibc/deploy/images/accton-asgvolt64/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/accton-asgvolt64_onie-onlpv1
+        
+    - name: Build accton-asgvolt64
+      if: ${{ success() || failure() }}
+      shell: bash
+      working-directory: mion
+      run: |
+        source openembedded-core/oe-init-build-env
+        ../cronie.sh -m delta-tn48m mion-onie-image-dent-initramfs
+        rsync -av tmp-glibc/deploy/images/delta-tn48m/ /srv/DEPLOY/${GITHUB_RUN_NUMBER}_failed/delta-tn48m_onie-image-dent-initramfs
 
     - name: Generate package feed
       if: ${{ success() && github.event_name == 'schedule' }}
@@ -124,6 +133,7 @@ jobs:
           accton-wedge100bf-32x
           accton-wedge100bf-65x
           accton-asgvolt64
+          delta-tn48m
       run: |
         RELEASE_DATE=$(awk '/^DISTRO_DATE/{print $3}' meta-mion/conf/distro/mion.conf | tr -d \")
         source openembedded-core/oe-init-build-env
