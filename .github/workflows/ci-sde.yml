@@ -22,42 +22,42 @@ jobs:
         ref: dunfell
         fetch-depth: 0
         submodules: true
-        path: mion
+        path: mion-sde
       
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion
+        path: mion-sde/meta-mion
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-bsp
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-bsp
+        path: mion-sde/meta-mion-bsp
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-backports
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-backports
+        path: mion-sde/meta-mion-backports
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-sde
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-sde 
+        path: mion-sde/meta-mion-sde 
         
     - uses: actions/checkout@v2
       with:
         repository: NetworkGradeLinux/meta-mion-stratum
         token: ${{ secrets.ACCESS_TOKEN }}
         ref: dunfell
-        path: mion/meta-mion-stratum 
+        path: mion-sde/meta-mion-stratum 
 
   build:
     runs-on: self-hosted
@@ -66,7 +66,7 @@ jobs:
     steps:
     - name: Pre-build steps
       shell: sh
-      working-directory: mion/build/conf
+      working-directory: mion-sde/build/conf
       run: |
         echo "Event name: ${GITHUB_EVENT_NAME}"
         [ "${GITHUB_EVENT_NAME}" = "schedule" ] && rm -rf /home/gh-runner/sstate-cache/
@@ -77,7 +77,7 @@ jobs:
     - name: Add Barefoot SDE to local.conf
       if: ${{ success() }}
       shell: sh
-      working-directory: mion/build/conf
+      working-directory: mion-sde/build/conf
       run: |
         sed -i "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\\\n\"#" bblayers.conf
         sed -i "s#^\"#  \${MIONBASE}/meta-mion-stratum \\\\\n\"#" bblayers.conf
@@ -87,7 +87,7 @@ jobs:
     - name: Build stordis-bf2556x-1t (SDE+Stratum)
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: mion-sde
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
@@ -96,7 +96,7 @@ jobs:
     - name: Build accton-wedge100bf-32x (SDE+Stratum)
       if: ${{ success() || failure() }}
       shell: bash
-      working-directory: mion
+      working-directory: mion-sde
       run: |
         source openembedded-core/oe-init-build-env
         ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
