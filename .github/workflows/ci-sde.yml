@@ -75,7 +75,6 @@ jobs:
       working-directory: ${{ github.workflow }}/mion/build/conf
       run: |
         sed -i "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\\\n\"#" bblayers.conf
-        sed -i "s#^\"#  \${MIONBASE}/meta-mion-stratum \\\\\n\"#" bblayers.conf
         echo "IMAGE_INSTALL += \"stratum\"" >> local.conf
         cp -r ~/bf-sde ../../
         
