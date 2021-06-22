@@ -1,9 +1,9 @@
 #!/bin/bash
 
-LAST_RELEASE="dunfell-2020.12"
+LAST_RELEASE="dunfell-2021.03"
 CHANGELOG="changelog.txt"
 
-repos=(mion meta-mion meta-mion-bsp meta-mion-sde meta-mion-stratum mion-docs)
+repos=(mion meta-mion meta-mion-bsp meta-mion-backports meta-mion-sde mion-docs)
 
 [ -f ${CHANGELOG} ] && rm ${CHANGELOG}
 

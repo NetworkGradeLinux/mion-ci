@@ -54,13 +54,6 @@ jobs:
         ref: dunfell
         path: ${{ github.workflow }}/mion/meta-mion-sde 
         
-    - uses: actions/checkout@v2
-      with:
-        repository: NetworkGradeLinux/meta-mion-stratum
-        token: ${{ secrets.ACCESS_TOKEN }}
-        ref: dunfell
-        path: ${{ github.workflow }}/mion/meta-mion-stratum 
-
   build:
     runs-on: self-hosted
     needs: [clone]
