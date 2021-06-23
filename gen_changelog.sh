@@ -20,12 +20,14 @@ repos="
 
 [ -f ${CHANGELOG} ] && rm ${CHANGELOG}
 
+printf "[ mion-ci - %s ]\\n" "$(git rev-parse --short HEAD)"
+
 for r in ${repos}; do
     [ ! -d "$r" ] && git clone "git@github.com:NetworkGradeLinux/${r}.git"
     
     (
-        printf "> %s\\n" "$r"
         cd "$r" && git pull > /dev/null 2>&1
+        printf "> %s - %s\\n" "$r" "$(git rev-parse --short HEAD)"
 
         printf "*** %s ***\\n\\n" "$r" >> ../${CHANGELOG}
 
