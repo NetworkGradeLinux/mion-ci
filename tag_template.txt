@@ -1,0 +1,23 @@
+mion <branch>-YYYY.MM "Codename"
+
+Brief description of whats new
+
+Main features and improvements
+- one
+- two
+- ...
+
+Notable bug fixes
+- one
+- two
+- ...
+
+Errata of known issues
+- one
+- two
+- ...
+
+Breaking changes
+- one
+- two
+- ...
