@@ -75,7 +75,6 @@ jobs:
       working-directory: ${{ github.workflow }}/mion/build/conf
       run: |
         sed -i "s#^\"#  \${MIONBASE}/meta-mion-sde/meta-mion-barefoot \\\\\n\"#" bblayers.conf
-        echo "IMAGE_INSTALL += \"stratum\"" >> local.conf
         cp -r ~/bf-sde ../../
         
     - name: Build stordis-bf2556x-1t (SDE+Stratum)
@@ -84,7 +83,7 @@ jobs:
       working-directory: ${{ github.workflow }}/mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-onlpv1
+        ../cronie.sh -m stordis-bf2556x-1t mion-onie-image-stratum
         rsync -av tmp-glibc/deploy/images/stordis-bf2556x-1t/ /srv/DEPLOY_SDE/${GITHUB_RUN_NUMBER}_failed/stordis-bf2556x-1t_onie-onlpv1
         
     - name: Build accton-wedge100bf-32x (SDE+Stratum)
@@ -93,7 +92,7 @@ jobs:
       working-directory: ${{ github.workflow }}/mion
       run: |
         source openembedded-core/oe-init-build-env
-        ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-onlpv1
+        ../cronie.sh -m accton-wedge100bf-32x mion-onie-image-stratum
         rsync -av tmp-glibc/deploy/images/accton-wedge100bf-32x/ /srv/DEPLOY_SDE/${GITHUB_RUN_NUMBER}_failed/accton-wedge100bf-32x_onie-onlpv1   
     
     - name: Post-build steps
