@@ -148,7 +148,6 @@ jobs:
       run: |
         cd /srv/DEPLOY/
         mv ${GITHUB_RUN_NUMBER}_failed ${GITHUB_RUN_NUMBER}
-        find ${GITHUB_RUN_NUMBER} -type f -size +4G -delete
         rm -rf $(ls -1t | tail -n +32)
         
     - name: Slack Notification on Fail
